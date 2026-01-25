@@ -1,21 +1,131 @@
 <!doctype html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pertubuhan Khairat</title>
-  <style>
-    body{font-family:system-ui,Arial;max-width:720px;margin:40px auto;padding:0 16px}
-    a{display:block;padding:14px 16px;border:1px solid #ddd;border-radius:12px;margin:10px 0;text-decoration:none;color:#111}
-    .muted{color:#666}
-  </style>
-</head>
-<body>
-  <h1>Pertubuhan Khairat</h1>
-  <p class="muted">Laman rasmi & semakan status ahli.</p>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Khairat Permatang Badak</title>
 
-  <a href="semak.html">✅ Semak Status Keahlian</a>
-  <a href="#">📝 Daftar Ahli (letak link Google Form nanti)</a>
-  <a href="#">☎️ Hubungi Admin</a>
+<style>
+:root{
+  --primary:#0f766e;
+  --light:#ecfdf5;
+  --border:#99f6e4;
+  --text:#064e3b;
+  --muted:#475569;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,Segoe UI,Arial;
+  background:linear-gradient(180deg,#ecfdf5,#ffffff);
+  color:var(--text);
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:24px 16px 60px;
+}
+
+header{
+  text-align:center;
+  padding:32px 16px;
+}
+
+header h1{
+  margin:0;
+  font-size:2rem;
+  color:var(--primary);
+}
+
+header p{
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  margin-top:20px;
+}
+
+.menu a{
+  text-decoration:none;
+  background:var(--light);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  color:var(--text);
+  transition:.2s;
+}
+
+.menu a:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.menu span{font-size:1.6rem}
+.menu strong{display:block;margin-top:6px}
+.menu small{color:var(--muted)}
+
+footer{
+  margin-top:48px;
+  text-align:center;
+  font-size:.85rem;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>Khairat Permatang Badak</h1>
+  <p>Sistem semakan & pengurusan keahlian khairat secara atas talian</p>
+</header>
+
+<div class="card">
+  <div class="menu">
+    <a href="semak.html">
+      <span>🔍</span>
+      <strong>Semak Status Keahlian</strong>
+      <small>Gunakan No IC tanpa dash</small>
+    </a>
+
+    <a href="#">
+      <span>📝</span>
+      <strong>Pendaftaran Ahli</strong>
+      <small>Borang pendaftaran khairat</small>
+    </a>
+
+    <a href="#">
+      <span>☎️</span>
+      <strong>Hubungi Admin</strong>
+      <small>Pertanyaan & bantuan</small>
+    </a>
+  </div>
+</div>
+
+<footer>
+© <span id="year"></span> Khairat Permatang Badak<br>
+Data ahli dilindungi & digunakan untuk urusan khairat sahaja
+</footer>
+
+</div>
+
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+</script>
 </body>
 </html>
