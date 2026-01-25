@@ -1,167 +1,48 @@
 <!doctype html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Semak Status Keahlian</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Semak Keahlian</title>
 
-  <style>
-    :root{
-      --bg1:#ecfdf5;
-      --bg2:#ffffff;
-      --primary:#0f766e;
-      --primary2:#065f46;
-      --border:#99f6e4;
-      --text:#064e3b;
-      --muted:#475569;
-      --card:#ffffff;
-      --shadow: 0 12px 30px rgba(0,0,0,.08);
-      --radius: 18px;
+<style>
+body{font-family:system-ui;background:#ecfdf5;margin:0;padding:20px}
+.card{background:#fff;padding:20px;border-radius:16px;max-width:500px;margin:auto}
+input,button{width:100%;padding:12px;margin-top:10px}
+.badge{padding:6px 12px;border-radius:999px;font-weight:bold}
+.AKTIF{background:#dcfce7;color:#16a34a}
+.TIDAKAKTIF{background:#fef9c3;color:#ca8a04}
+.TELAHMENAMATKANKEAHLIAN{background:#fee2e2;color:#dc2626}
+</style>
+</head>
 
-      --okbg:#dcfce7; --ok:#16a34a;
-      --pbg:#fef9c3;  --p:#ca8a04;
-      --rbg:#fee2e2;  --r:#dc2626;
-    }
+<body>
+<div class="card">
+<h2>Semak Status Keahlian</h2>
+<p>Masukkan No IC tanpa dash (-)</p>
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 500px at 50% 0%, var(--bg1), var(--bg2));
-      color:var(--text);
-      line-height:1.4;
-    }
+<input id="ic" placeholder="900101011234">
+<button onclick="semak()">Semak</button>
 
-    .container{
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 18px 14px 56px;
-    }
+<div id="result"></div>
+</div>
 
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 10px 0 18px;
-    }
+<script>
+const API_URL="PASTE_URL_APPS_SCRIPT_DI_SINI";
 
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      text-decoration:none;
-      color:inherit;
-    }
-    .logo{
-      width:42px;height:42px;border-radius:14px;
-      background: linear-gradient(135deg, var(--primary), var(--primary2));
-      box-shadow: 0 8px 18px rgba(15,118,110,.25);
-      display:grid;place-items:center;
-      color:#fff;font-weight:800;
-    }
-    .brand strong{font-size:14px}
-    .brand span{display:block;font-size:12px;color:var(--muted)}
+function norm(s){return s.replace(/[^0-9]/g,'')}
+function key(s){return s.toUpperCase().replace(/\s+/g,'').replace(/[()]/g,'')}
 
-    .navlinks{display:flex;gap:8px;flex-wrap:wrap}
-    .navlinks a{
-      text-decoration:none;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(153,246,228,.7);
-      background: rgba(236,253,245,.7);
-      font-size:13px;
-      color:inherit;
-    }
-
-    h1{
-      margin: 0 0 8px;
-      font-size: clamp(20px, 3.2vw, 30px);
-      color: var(--primary2);
-      letter-spacing:-.2px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:12px;
-    }
-
-    .card{
-      background: var(--card);
-      border:1px solid rgba(153,246,228,.75);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    label{display:block;margin:10px 0 6px;color:var(--muted);font-size:13px}
-    input{
-      width:100%;
-      padding: 14px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(153,246,228,.9);
-      font-size:16px;
-      outline:none;
-      background:#fff;
-    }
-    input:focus{border-color: rgba(15,118,110,.8); box-shadow:0 0 0 4px rgba(15,118,110,.12)}
-
-    .btn{
-      margin-top: 12px;
-      width:100%;
-      padding: 14px 14px;
-      border-radius: 14px;
-      border:none;
-      font-size:16px;
-      font-weight:800;
-      cursor:pointer;
-      background: linear-gradient(135deg, var(--primary), var(--primary2));
-      color:#fff;
-      box-shadow: 0 14px 26px rgba(15,118,110,.22);
-    }
-    .btn:hover{opacity:.95}
-
-    .hint{margin-top:10px;color:var(--muted);font-size:12px}
-    .msg{margin-top:12px;color:var(--muted);font-size:13px}
-    .err{color: var(--r); font-weight:700}
-
-    .result{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .row{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding: 10px 0;
-      border-bottom: 1px dashed rgba(153,246,228,.7);
-    }
-    .row:last-child{border-bottom:0}
-    .row .k{color:var(--muted);font-size:13px}
-    .row .v{font-weight:800}
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      font-weight:900;
-      font-size:12px;
-      letter-spacing:.4px;
-    }
-    .ACTIVE{background:var(--okbg); color:var(--ok)}
-    .PENDING{background:var(--pbg); color:var(--p)}
-    .NEW{background:var(--pbg); color:var(--p)}
-    .SUSPENDED{background:var(--rbg); color:var(--r)}
-    .TERMINATED{background:var(--rbg); color:var(--r)}
-
-    .mini{
-      background: rgba(236,253,245,.7);
-      border: 1px solid rgba(153,246,228,.7);
-      border-radius: var(--radius);
-      padding: 14px;
-      color: var(--muted);
-      font-size:
+async function semak(){
+ const ic=norm(document.getElementById("ic").value);
+ const r=await fetch(API_URL+"?ic="+ic);
+ const d=await r.json();
+ if(!d.ok){result.innerHTML="<p>Status tidak dijumpai</p>";return;}
+ const k=key(d.status);
+ result.innerHTML=`
+ <p><b>Nama:</b> ${d.nama}</p>
+ <p><b>Status:</b> <span class="badge ${k}">${d.status}</span></p>`;
+}
+</script>
+</body>
+</html>
