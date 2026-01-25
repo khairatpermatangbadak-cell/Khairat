@@ -1,86 +1,125 @@
 <!doctype html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Semak Status Keahlian</title>
-  <style>
-    body{font-family:system-ui,Arial;max-width:720px;margin:40px auto;padding:0 16px}
-    .card{border:1px solid #ddd;border-radius:12px;padding:18px;margin-top:16px}
-    label{display:block;margin:10px 0 6px}
-    input{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px}
-    button{margin-top:12px;padding:12px 16px;border:0;border-radius:10px;font-size:16px;cursor:pointer}
-    .muted{color:#666;font-size:14px}
-    .ok{font-weight:700}
-    .err{color:#b00020;font-weight:700}
-    .row{margin:8px 0}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Semak Status Keahlian</title>
+
+<style>
+:root{
+  --primary:#0f766e;
+  --light:#ecfdf5;
+  --border:#99f6e4;
+  --text:#064e3b;
+  --muted:#475569;
+  --green:#16a34a;
+  --yellow:#ca8a04;
+  --red:#dc2626;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,Segoe UI,Arial;
+  background:linear-gradient(180deg,#ecfdf5,#ffffff);
+  color:var(--text);
+}
+
+.container{
+  max-width:720px;
+  margin:auto;
+  padding:24px 16px 60px;
+}
+
+h1{text-align:center;color:var(--primary)}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+  margin-top:20px;
+}
+
+label{display:block;margin-top:12px}
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:16px;
+}
+
+button{
+  margin-top:14px;
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:var(--primary);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{opacity:.9}
+
+.status{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.ACTIVE{background:#dcfce7;color:var(--green)}
+.PENDING{background:#fef9c3;color:var(--yellow)}
+.SUSPENDED,.TERMINATED{background:#fee2e2;color:var(--red)}
+
+.muted{color:var(--muted);font-size:.9rem}
+</style>
 </head>
+
 <body>
-  <h1>Semak Status Keahlian</h1>
-  <p class="muted">Masukkan No IC (tanpa dash). Sistem akan paparkan status pendaftaran sahaja.</p>
+<div class="container">
 
-  <div class="card">
-    <label for="ic">No IC</label>
-    <input id="ic" placeholder="contoh: 900101011234" inputmode="numeric" />
-    <button id="btn">Semak</button>
-    <div id="msg" class="row muted"></div>
-  </div>
+<h1>Semak Status Keahlian</h1>
 
-  <div id="result" class="card" style="display:none"></div>
+<div class="card">
+  <label>No IC (tanpa dash)</label>
+  <input id="ic" placeholder="900101011234">
+  <button onclick="semak()">Semak Status</button>
+  <p id="msg" class="muted"></p>
+</div>
 
-  <script>
-    const API_URL = "PASTE_URL_WEB_APP_DISINI"; // nanti tukar
+<div id="result" class="card" style="display:none"></div>
 
-    const icEl = document.getElementById("ic");
-    const btn = document.getElementById("btn");
-    const msg = document.getElementById("msg");
-    const result = document.getElementById("result");
+</div>
 
-    function normIC(v){ return String(v||"").replace(/[^0-9]/g,"").trim(); }
+<script>
+const API_URL="PASTE_URL_WEB_APP_DISINI";
 
-    async function semak(){
-      result.style.display = "none";
-      result.innerHTML = "";
-      msg.textContent = "Menyemak...";
-      msg.className = "row muted";
+function norm(v){return v.replace(/[^0-9]/g,'')}
 
-      const ic = normIC(icEl.value);
-      if(ic.length < 8){
-        msg.textContent = "No IC tidak sah.";
-        msg.className = "row err";
-        return;
-      }
+async function semak(){
+  const ic=norm(document.getElementById("ic").value);
+  if(ic.length<8){msg.textContent="No IC tidak sah";return}
 
-      try{
-        const url = `${API_URL}?ic=${encodeURIComponent(ic)}`;
-        const res = await fetch(url, { method:"GET" });
-        const data = await res.json();
+  msg.textContent="Menyemak...";
+  const res=await fetch(API_URL+"?ic="+ic);
+  const d=await res.json();
 
-        if(!data.ok){
-          msg.textContent = data.message || "Tidak berjaya.";
-          msg.className = "row err";
-          return;
-        }
+  if(!d.ok){msg.textContent=d.message;return}
 
-        msg.textContent = "Dijumpai.";
-        msg.className = "row muted";
-
-        result.style.display = "block";
-        result.innerHTML = `
-          <div class="row"><span class="muted">Nama:</span> <span class="ok">${data.nama || "-"}</span></div>
-          <div class="row"><span class="muted">Status:</span> <span class="ok">${data.status || "-"}</span></div>
-          <div class="row"><span class="muted">Tarikh Aktif:</span> <span>${data.tarikh_aktif || "-"}</span></div>
-          <div class="row"><span class="muted">Tarikh Tamat:</span> <span>${data.tarikh_tamat || "-"}</span></div>
-        `;
-      }catch(e){
-        msg.textContent = "Ralat sambungan. Cuba lagi.";
-        msg.className = "row err";
-      }
-    }
-
-    btn.addEventListener("click", semak);
-    icEl.addEventListener("keydown", (e)=>{ if(e.key==="Enter") semak(); });
-  </script>
+  result.style.display="block";
+  result.innerHTML=`
+    <p><strong>Nama:</strong> ${d.nama}</p>
+    <p><strong>Status:</strong>
+      <span class="status ${d.status}">${d.status}</span>
+    </p>
+    <p><strong>Tarikh Aktif:</strong> ${d.tarikh_aktif||"-"}</p>
+    <p><strong>Tarikh Tamat:</strong> ${d.tarikh_tamat||"-"}</p>
+  `;
+  msg.textContent="";
+}
+</script>
 </body>
 </html>
