@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pertubuhan Khairat</title>
+  <style>
+    body{font-family:system-ui,Arial;max-width:720px;margin:40px auto;padding:0 16px}
+    a{display:block;padding:14px 16px;border:1px solid #ddd;border-radius:12px;margin:10px 0;text-decoration:none;color:#111}
+    .muted{color:#666}
+  </style>
+</head>
+<body>
+  <h1>Pertubuhan Khairat</h1>
+  <p class="muted">Laman rasmi & semakan status ahli.</p>
+
+  <a href="semak.html">✅ Semak Status Keahlian</a>
+  <a href="#">📝 Daftar Ahli (letak link Google Form nanti)</a>
+  <a href="#">☎️ Hubungi Admin</a>
+</body>
+</html>
