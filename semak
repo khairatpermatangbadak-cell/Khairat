@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Semak Status Keahlian</title>
+  <style>
+    body{font-family:system-ui,Arial;max-width:720px;margin:40px auto;padding:0 16px}
+    .card{border:1px solid #ddd;border-radius:12px;padding:18px;margin-top:16px}
+    label{display:block;margin:10px 0 6px}
+    input{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font-size:16px}
+    button{margin-top:12px;padding:12px 16px;border:0;border-radius:10px;font-size:16px;cursor:pointer}
+    .muted{color:#666;font-size:14px}
+    .ok{font-weight:700}
+    .err{color:#b00020;font-weight:700}
+    .row{margin:8px 0}
+  </style>
+</head>
+<body>
+  <h1>Semak Status Keahlian</h1>
+  <p class="muted">Masukkan No IC (tanpa dash). Sistem akan paparkan status pendaftaran sahaja.</p>
+
+  <div class="card">
+    <label for="ic">No IC</label>
+    <input id="ic" placeholder="contoh: 900101011234" inputmode="numeric" />
+    <button id="btn">Semak</button>
+    <div id="msg" class="row muted"></div>
+  </div>
+
+  <div id="result" class="card" style="display:none"></div>
+
+  <script>
+    const API_URL = "PASTE_URL_WEB_APP_DISINI"; // nanti tukar
+
+    const icEl = document.getElementById("ic");
+    const btn = document.getElementById("btn");
+    const msg = document.getElementById("msg");
+    const result = document.getElementById("result");
+
+    function normIC(v){ return String(v||"").replace(/[^0-9]/g,"").trim(); }
+
+    async function semak(){
+      result.style.display = "none";
+      result.innerHTML = "";
+      msg.textContent = "Menyemak...";
+      msg.className = "row muted";
+
+      const ic = normIC(icEl.value);
+      if(ic.length < 8){
+        msg.textContent = "No IC tidak sah.";
+        msg.className = "row err";
+        return;
+      }
+
+      try{
+        const url = `${API_URL}?ic=${encodeURIComponent(ic)}`;
+        const res = await fetch(url, { method:"GET" });
+        const data = await res.json();
+
+        if(!data.ok){
+          msg.textContent = data.message || "Tidak berjaya.";
+          msg.className = "row err";
+          return;
+        }
+
+        msg.textContent = "Dijumpai.";
+        msg.className = "row muted";
+
+        result.style.display = "block";
+        result.innerHTML = `
+          <div class="row"><span class="muted">Nama:</span> <span class="ok">${data.nama || "-"}</span></div>
+          <div class="row"><span class="muted">Status:</span> <span class="ok">${data.status || "-"}</span></div>
+          <div class="row"><span class="muted">Tarikh Aktif:</span> <span>${data.tarikh_aktif || "-"}</span></div>
+          <div class="row"><span class="muted">Tarikh Tamat:</span> <span>${data.tarikh_tamat || "-"}</span></div>
+        `;
+      }catch(e){
+        msg.textContent = "Ralat sambungan. Cuba lagi.";
+        msg.className = "row err";
+      }
+    }
+
+    btn.addEventListener("click", semak);
+    icEl.addEventListener("keydown", (e)=>{ if(e.key==="Enter") semak(); });
+  </script>
+</body>
+</html>
