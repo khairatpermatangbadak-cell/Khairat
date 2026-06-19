@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Pendaftaran Ahli Baharu</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f5f7fa;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+    }
+
+    .section-title {
+      background: #198754;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .logo {
+      max-width: 120px;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .item-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: white;
+    }
+
+    .required {
+      color: red;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      width: 100%;
+      height: 250px;
+      background: #fff;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+  <div class="text-center mb-4">
+    <img src="logo.png" class="logo mb-3" alt="Logo">
+
+    <h2>
+      PERTUBUHAN KHAIRAT KEMATIAN
+      <br>
+      KAMPUNG PERMATANG BADAK
+    </h2>
+
+    <p class="text-muted">
+      Borang Permohonan Keahlian
+    </p>
+  </div>
+
+  <form id="membershipForm">
+
+    <!-- MAKLUMAT PEMOHON -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          MAKLUMAT PEMOHON
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <label>Nama Penuh <span class="required">*</span></label>
+            <input type="text" class="form-control uppercase" id="nama" required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label>No Kad Pengenalan <span class="required">*</span></label>
+            <input type="text" class="form-control ic-input" id="ic" maxlength="14" required>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Tarikh Lahir</label>
+            <input type="date" class="form-control" id="tarikh_lahir" readonly>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Umur</label>
+            <input type="number" class="form-control" id="umur" readonly>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Jantina <span class="required">*</span></label>
+            <select class="form-select" id="jantina" required>
+              <option value="">PILIH</option>
+              <option>LELAKI</option>
+              <option>PEREMPUAN</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Status Perkahwinan <span class="required">*</span></label>
+            <select class="form-select" id="status_perkahwinan" required>
+              <option value="">PILIH</option>
+              <option>BUJANG</option>
+              <option>BERKAHWIN</option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label>Pekerjaan</label>
+            <input type="text" class="form-control uppercase" id="pekerjaan">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Telefon <span class="required">*</span></label>
+            <input type="tel" class="form-control" id="telefon" placeholder="0123456789" required>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Email <span class="required">*</span></label>
+            <input type="email" class="form-control" id="email" required>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ALAMAT -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          ALAMAT
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <label>No Lot / Rumah</label>
+            <input type="text" class="form-control uppercase" id="alamat_lot">
+          </div>
+
+          <div class="col-md-8 mb-3">
+            <label>Jalan</label>
+            <input type="text" class="form-control uppercase" id="alamat_jalan">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Kampung</label>
+            <input type="text" class="form-control uppercase" id="alamat_kampung" value="KAMPUNG PERMATANG BADAK">
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Poskod</label>
+            <input type="text" class="form-control" id="alamat_poskod">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Daerah</label>
+            <input type="text" class="form-control uppercase" id="alamat_daerah" value="KUANTAN">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Negeri</label>
+            <input type="text" class="form-control uppercase" id="alamat_negeri" value="PAHANG">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PASANGAN -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="section-title mb-0">
+            PASANGAN
+          </div>
+
+          <button type="button" class="btn btn-success" onclick="addSpouse()">
+            + TAMBAH PASANGAN
+          </button>
+        </div>
+
+        <div id="spouseContainer"></div>
+
+      </div>
+    </div>
+
+    <!-- TANGGUNGAN -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          TANGGUNGAN
+        </div>
+
+        <div class="alert alert-warning">
+          <b>MAKLUMAN TANGGUNGAN</b><br>
+          Pendaftaran tanggungan adalah tertakluk kepada Perlembagaan Pertubuhan Khairat Kematian Kampung Permatang Badak dan kelulusan Jawatankuasa.
+          Kelayakan menerima bantuan akan ditentukan berdasarkan maklumat yang didaftarkan serta syarat yang berkuat kuasa.
+        </div>
+
+        <button type="button" class="btn btn-success mb-3" onclick="addDependent()">
+          + TAMBAH TANGGUNGAN
+        </button>
+
+        <div id="dependentContainer"></div>
+
+      </div>
+    </div>
+
+    <!-- WARIS -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          WARIS UNTUK DIHUBUNGI
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <label>Nama Waris</label>
+            <input type="text" id="waris_nama" class="form-control uppercase">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Hubungan</label>
+            <select id="waris_hubungan" class="form-select">
+              <option value="">PILIH</option>
+              <option>SUAMI</option>
+              <option>ISTERI</option>
+              <option>ANAK</option>
+              <option>IBU</option>
+              <option>BAPA</option>
+              <option>ADIK</option>
+              <option>ABANG</option>
+              <option>KAKAK</option>
+              <option>MENTUA</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Telefon</label>
+            <input type="text" id="waris_telefon" class="form-control">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PENAMAAN -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          PENAMAAN
+        </div>
+
+        <div class="mb-3">
+          <select id="jenis_penamaan" class="form-select" onchange="togglePenamaan()">
+            <option value="">PILIH JENIS PENAMAAN</option>
+            <option value="INDIVIDU">INDIVIDU</option>
+            <option value="PERTUBUHAN">PERTUBUHAN KHAIRAT KEMATIAN KAMPUNG PERMATANG BADAK</option>
+          </select>
+        </div>
+
+        <div id="penamaSection">
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+              <label>Nama Penama</label>
+              <input type="text" id="penama_nama" class="form-control uppercase">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label>No IC Penama</label>
+              <input type="text" id="penama_ic" class="form-control ic-input">
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label>Hubungan</label>
+              <input type="text" id="penama_hubungan" class="form-control uppercase">
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label>Telefon</label>
+              <input type="text" id="penama_telefon" class="form-control">
+            </div>
+
+            <div class="col-md-12 mb-3">
+              <label>Alamat</label>
+              <textarea id="penama_alamat" class="form-control"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WAKIL PENGUTIP -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          WAKIL PENGUTIP
+        </div>
+
+        <select id="collector_id" class="form-select">
+          <option value="">PILIH WAKIL PENGUTIP</option>
+        </select>
+
+      </div>
+    </div>
+
+    <!-- TANDATANGAN -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="section-title">
+          TANDATANGAN PEMOHON
+        </div>
+
+        <canvas id="signaturePad"></canvas>
+
+        <div class="mt-3">
+          <button type="button" class="btn btn-secondary" onclick="clearSignature()">
+            PADAM TANDATANGAN
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AKUAN -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="akuan" required>
+
+          <label class="form-check-label" for="akuan">
+            SAYA MENGAKU BAHAWA SEMUA MAKLUMAT YANG DIBERIKAN ADALAH BENAR.
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="text-center mb-5">
+      <button type="button" class="btn btn-warning btn-lg me-2" onclick="saveDraft()">
+        SIMPAN DRAF
+      </button>
+
+      <button type="submit" class="btn btn-success btn-lg">
+        HANTAR PERMOHONAN
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLH1TFwfcSAtMUjamoEge0VSFBogAEj6bnH40_-qhF0ZgRKzRq184FT018CrESpHvBJw/exec';
+
+  let signaturePad;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setupSignaturePad();
+    loadDraft();
+    togglePenamaan();
+  });
+
+  // =========================
+  // SIGNATURE
+  // =========================
+  function setupSignaturePad() {
+    const canvas = document.getElementById('signaturePad');
+    signaturePad = new SignaturePad(canvas);
+
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = 250 * ratio;
+
+      const context = canvas.getContext('2d');
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      signaturePad.clear();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  }
+
+  function clearSignature() {
+    signaturePad.clear();
+  }
+
+  // =========================
+  // TAMBAH PASANGAN
+  // =========================
+  function addSpouse() {
+    const html = `
+      <div class="item-card spouse-card">
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <label>Nama Pasangan</label>
+            <input type="text" class="form-control uppercase spouse-name">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label>No IC Pasangan</label>
+            <input type="text" class="form-control spouse-ic ic-input" maxlength="14">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Tarikh Lahir</label>
+            <input type="date" class="form-control spouse-dob" readonly>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Umur</label>
+            <input type="number" class="form-control spouse-age" readonly>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Telefon</label>
+            <input type="text" class="form-control spouse-phone">
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end mb-3">
+            <button type="button" class="btn btn-danger w-100" onclick="this.closest('.spouse-card').remove()">
+              PADAM
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.getElementById('spouseContainer').insertAdjacentHTML('beforeend', html);
+  }
+
+  // =========================
+  // TAMBAH TANGGUNGAN
+  // =========================
+  function addDependent() {
+    const html = `
+      <div class="item-card dependent-card">
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <label>Nama</label>
+            <input type="text" class="form-control uppercase dep-name">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>No IC</label>
+            <input type="text" class="form-control dep-ic ic-input" maxlength="14">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label>Hubungan</label>
+            <select class="form-select dep-hubungan">
+              <option>ANAK</option>
+              <option>ANAK TIRI</option>
+              <option>ANAK ANGKAT</option>
+              <option>IBU</option>
+              <option>BAPA</option>
+              <option>MENTUA</option>
+              <option>LAIN-LAIN</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label>Tarikh Lahir</label>
+            <input type="date" class="form-control dep-dob" readonly>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Umur</label>
+            <input type="number" class="form-control dep-age" readonly>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Pelajar</label>
+            <select class="form-select dep-pelajar">
+              <option>YA</option>
+              <option>TIDAK</option>
+            </select>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Pekerjaan</label>
+            <select class="form-select dep-kerja">
+              <option>TIDAK BEKERJA</option>
+              <option>BEKERJA</option>
+              <option>PESARA</option>
+            </select>
+          </div>
+
+          <div class="col-md-2 mb-3">
+            <label>Perkahwinan</label>
+            <select class="form-select dep-kahwin">
+              <option>BUJANG</option>
+              <option>BERKAHWIN</option>
+            </select>
+          </div>
+
+          <div class="col-md-1 mb-3">
+            <label>OKU</label>
+            <select class="form-select dep-oku">
+              <option>TIDAK</option>
+              <option>YA</option>
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <button type="button" class="btn btn-danger" onclick="this.closest('.dependent-card').remove()">
+              PADAM
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.getElementById('dependentContainer').insertAdjacentHTML('beforeend', html);
+  }
+
+  // =========================
+  // PENAMAAN
+  // =========================
+  function togglePenamaan() {
+    const jenis = document.getElementById('jenis_penamaan').value;
+    const section = document.getElementById('penamaSection');
+
+    if (jenis === 'PERTUBUHAN') {
+      section.style.display = 'none';
+    } else {
+      section.style.display = 'block';
+    }
+  }
+
+  // =========================
+  // INPUT HANDLER
+  // =========================
+  document.addEventListener('input', function (e) {
+    if (e.target.classList.contains('uppercase')) {
+      e.target.value = e.target.value.toUpperCase();
+    }
+
+    if (e.target.classList.contains('ic-input')) {
+      e.target.value = formatIC(e.target.value);
+    }
+
+    if (e.target.id === 'ic') {
+      const dob = getDOBFromIC(e.target.value);
+
+      if (dob) {
+        document.getElementById('tarikh_lahir').value = dob;
+        document.getElementById('umur').value = calculateAge(dob);
+      }
+    }
+
+    if (e.target.classList.contains('spouse-ic')) {
+      const card = e.target.closest('.spouse-card');
+      const dob = getDOBFromIC(e.target.value);
+
+      if (dob) {
+        card.querySelector('.spouse-dob').value = dob;
+        card.querySelector('.spouse-age').value = calculateAge(dob);
+      }
+    }
+
+    if (e.target.classList.contains('dep-ic')) {
+      const card = e.target.closest('.dependent-card');
+      const dob = getDOBFromIC(e.target.value);
+
+      if (dob) {
+        card.querySelector('.dep-dob').value = dob;
+        card.querySelector('.dep-age').value = calculateAge(dob);
+      }
+    }
+  });
+
+  // =========================
+  // FORMAT IC & DOB
+  // =========================
+  function formatIC(value) {
+    let raw = value.replace(/\D/g, '');
+
+    if (raw.length > 12) {
+      raw = raw.substring(0, 12);
+    }
+
+    if (raw.length > 6 && raw.length <= 8) {
+      return raw.replace(/^(\d{6})(\d+)/, '$1-$2');
+    }
+
+    if (raw.length > 8) {
+      return raw.replace(/^(\d{6})(\d{2})(\d+)/, '$1-$2-$3');
+    }
+
+    return raw;
+  }
+
+  function getDOBFromIC(ic) {
+    const raw = ic.replace(/\D/g, '');
+
+    if (raw.length !== 12) {
+      return null;
+    }
+
+    const yy = parseInt(raw.substring(0, 2), 10);
+    const mm = raw.substring(2, 4);
+    const dd = raw.substring(4, 6);
+
+    const year = yy > 30 ? 1900 + yy : 2000 + yy;
+
+    const dob = `${year}-${mm}-${dd}`;
+
+    const date = new Date(dob);
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+
+    return dob;
+  }
+
+  function calculateAge(dob) {
+    const birth = new Date(dob);
+    const today = new Date();
+
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  }
+
+  // =========================
+  // TELEFON
+  // =========================
+  function normalizePhone(phone) {
+    let clean = phone.replace(/\D/g, '');
+
+    if (!clean) {
+      return '';
+    }
+
+    if (clean.startsWith('0')) {
+      clean = '60' + clean.substring(1);
+    }
+
+    if (clean.startsWith('60')) {
+      return '+' + clean;
+    }
+
+    return '+' + clean;
+  }
+
+  // =========================
+  // COLLECT DATA
+  // =========================
+  function collectSpouses() {
+    const pasangan = [];
+
+    document.querySelectorAll('.spouse-card').forEach(function (card) {
+      pasangan.push({
+        nama: card.querySelector('.spouse-name')?.value || '',
+        ic: card.querySelector('.spouse-ic')?.value || '',
+        tarikh_lahir: card.querySelector('.spouse-dob')?.value || '',
+        umur: card.querySelector('.spouse-age')?.value || '',
+        telefon: normalizePhone(card.querySelector('.spouse-phone')?.value || '')
+      });
+    });
+
+    return pasangan;
+  }
+
+  function collectDependents() {
+    const tanggungan = [];
+
+    document.querySelectorAll('.dependent-card').forEach(function (card) {
+      tanggungan.push({
+        nama: card.querySelector('.dep-name')?.value || '',
+        ic: card.querySelector('.dep-ic')?.value || '',
+        tarikh_lahir: card.querySelector('.dep-dob')?.value || '',
+        umur: card.querySelector('.dep-age')?.value || '',
+        hubungan: card.querySelector('.dep-hubungan')?.value || '',
+        pelajar: card.querySelector('.dep-pelajar')?.value || '',
+        pekerjaan: card.querySelector('.dep-kerja')?.value || '',
+        status_perkahwinan: card.querySelector('.dep-kahwin')?.value || '',
+        oku: card.querySelector('.dep-oku')?.value || ''
+      });
+    });
+
+    return tanggungan;
+  }
+
+  // =========================
+  // SUBMIT
+  // =========================
+  document.getElementById('membershipForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    if (signaturePad.isEmpty()) {
+      alert('SILA TANDATANGAN TERLEBIH DAHULU');
+      return;
+    }
+
+    const formData = {
+      action: 'submitApplication',
+
+      nama: document.getElementById('nama').value,
+      ic: document.getElementById('ic').value,
+      tarikh_lahir: document.getElementById('tarikh_lahir').value,
+      umur: document.getElementById('umur').value,
+      jantina: document.getElementById('jantina').value,
+      status_perkahwinan: document.getElementById('status_perkahwinan').value,
+      pekerjaan: document.getElementById('pekerjaan').value,
+      telefon: normalizePhone(document.getElementById('telefon').value),
+      email: document.getElementById('email').value,
+
+      alamat_lot: document.getElementById('alamat_lot').value,
+      alamat_jalan: document.getElementById('alamat_jalan').value,
+      alamat_kampung: document.getElementById('alamat_kampung').value,
+      alamat_poskod: document.getElementById('alamat_poskod').value,
+      alamat_daerah: document.getElementById('alamat_daerah').value,
+      alamat_negeri: document.getElementById('alamat_negeri').value,
+
+      pasangan: collectSpouses(),
+      tanggungan: collectDependents(),
+
+      waris_nama: document.getElementById('waris_nama').value,
+      waris_hubungan: document.getElementById('waris_hubungan').value,
+      waris_telefon: normalizePhone(document.getElementById('waris_telefon').value),
+
+      jenis_penamaan: document.getElementById('jenis_penamaan').value,
+      penama_nama: document.getElementById('penama_nama').value,
+      penama_ic: document.getElementById('penama_ic').value,
+      penama_hubungan: document.getElementById('penama_hubungan').value,
+      penama_telefon: normalizePhone(document.getElementById('penama_telefon').value),
+      penama_alamat: document.getElementById('penama_alamat').value,
+
+      collector_id: document.getElementById('collector_id').value,
+
+      signature_url: signaturePad.toDataURL()
+    };
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        localStorage.removeItem('khairatDraft');
+        alert('PERMOHONAN BERJAYA DIHANTAR');
+        location.reload();
+      } else {
+        alert(result.message || 'PERMOHONAN TIDAK BERJAYA DIHANTAR');
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert('RALAT MENGHANTAR PERMOHONAN');
+    }
+  });
+
+  // =========================
+  // DRAFT
+  // =========================
+  function saveDraft() {
+    const draft = {
+      nama: document.getElementById('nama').value,
+      ic: document.getElementById('ic').value,
+      tarikh_lahir: document.getElementById('tarikh_lahir').value,
+      umur: document.getElementById('umur').value,
+      jantina: document.getElementById('jantina').value,
+      status_perkahwinan: document.getElementById('status_perkahwinan').value,
+      pekerjaan: document.getElementById('pekerjaan').value,
+      telefon: document.getElementById('telefon').value,
+      email: document.getElementById('email').value,
+      alamat_lot: document.getElementById('alamat_lot').value,
+      alamat_jalan: document.getElementById('alamat_jalan').value,
+      alamat_kampung: document.getElementById('alamat_kampung').value,
+      alamat_poskod: document.getElementById('alamat_poskod').value,
+      alamat_daerah: document.getElementById('alamat_daerah').value,
+      alamat_negeri: document.getElementById('alamat_negeri').value
+    };
+
+    localStorage.setItem('khairatDraft', JSON.stringify(draft));
+    alert('DRAF BERJAYA DISIMPAN');
+  }
+
+  function loadDraft() {
+    const draft = localStorage.getItem('khairatDraft');
+
+    if (!draft) {
+      return;
+    }
+
+    const data = JSON.parse(draft);
+
+    Object.keys(data).forEach(function (key) {
+      const field = document.getElementById(key);
+
+      if (field) {
+        field.value = data[key] || '';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
