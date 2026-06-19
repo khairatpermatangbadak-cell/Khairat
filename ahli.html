@@ -297,6 +297,192 @@ onclick="addSpouse()">
 
 <div class="text-center mb-5">
 
+<!-- TANGGUNGAN -->
+
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="section-title">
+TANGGUNGAN
+</div>
+
+<div class="alert alert-warning">
+
+<b>MAKLUMAN TANGGUNGAN</b><br>
+
+Pendaftaran tanggungan adalah tertakluk kepada Perlembagaan Pertubuhan Khairat Kematian Kampung Permatang Badak dan kelulusan Jawatankuasa.
+
+Kelayakan menerima bantuan akan ditentukan berdasarkan maklumat yang didaftarkan serta syarat yang berkuat kuasa.
+
+</div>
+
+<button
+type="button"
+class="btn btn-success mb-3"
+onclick="addDependent()">
+
++ TAMBAH TANGGUNGAN
+
+</button>
+
+<div id="dependentContainer"></div>
+
+</div>
+</div>
+
+<!-- WARIS -->
+
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="section-title">
+WARIS UNTUK DIHUBUNGI
+</div>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+<label>Nama Waris</label>
+<input type="text"
+id="waris_nama"
+class="form-control uppercase">
+</div>
+
+<div class="col-md-4 mb-3">
+<label>Hubungan</label>
+<select
+id="waris_hubungan"
+class="form-select">
+
+<option value="">
+PILIH
+</option>
+
+<option>SUAMI</option>
+<option>ISTERI</option>
+<option>ANAK</option>
+<option>IBU</option>
+<option>BAPA</option>
+<option>ADIK</option>
+<option>ABANG</option>
+<option>KAKAK</option>
+<option>MENTUA</option>
+
+</select>
+</div>
+
+<div class="col-md-4 mb-3">
+<label>Telefon</label>
+<input type="text"
+id="waris_telefon"
+class="form-control">
+</div>
+
+</div>
+
+</div>
+</div>
+
+<!-- PENAMAAN -->
+
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="section-title">
+PENAMAAN
+</div>
+
+<div class="mb-3">
+
+<select
+id="jenis_penamaan"
+class="form-select"
+onchange="togglePenamaan()">
+
+<option value="">
+PILIH JENIS PENAMAAN
+</option>
+
+<option value="INDIVIDU">
+INDIVIDU
+</option>
+
+<option value="PERTUBUHAN">
+PERTUBUHAN KHAIRAT KEMATIAN KAMPUNG PERMATANG BADAK
+</option>
+
+</select>
+
+</div>
+
+<div id="penamaSection">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>Nama Penama</label>
+<input type="text"
+id="penama_nama"
+class="form-control uppercase">
+</div>
+
+<div class="col-md-6 mb-3">
+<label>No IC Penama</label>
+<input type="text"
+id="penama_ic"
+class="form-control">
+</div>
+
+<div class="col-md-4 mb-3">
+<label>Hubungan</label>
+<input type="text"
+id="penama_hubungan"
+class="form-control uppercase">
+</div>
+
+<div class="col-md-4 mb-3">
+<label>Telefon</label>
+<input type="text"
+id="penama_telefon"
+class="form-control">
+</div>
+
+<div class="col-md-12 mb-3">
+<label>Alamat</label>
+<textarea
+id="penama_alamat"
+class="form-control"></textarea>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+<!-- WAKIL PENGUTIP -->
+
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="section-title">
+WAKIL PENGUTIP
+</div>
+
+<select
+id="collector_id"
+class="form-select">
+
+<option value="">
+PILIH WAKIL PENGUTIP
+</option>
+
+</select>
+
+</div>
+    
+</div>
 <button
 type="button"
 class="btn btn-primary btn-lg">
@@ -369,6 +555,116 @@ PADAM
 document
 .getElementById('spouseContainer')
 .insertAdjacentHTML('beforeend',html);
+
+}
+
+function addDependent(){
+
+let html = `
+
+<div class="spouse-card">
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+<label>Nama</label>
+<input type="text"
+class="form-control uppercase dep-name">
+</div>
+
+<div class="col-md-4 mb-3">
+<label>No IC</label>
+<input type="text"
+class="form-control dep-ic">
+</div>
+
+<div class="col-md-4 mb-3">
+<label>Hubungan</label>
+<select class="form-select dep-hubungan">
+
+<option>ANAK</option>
+<option>ANAK TIRI</option>
+<option>ANAK ANGKAT</option>
+<option>IBU</option>
+<option>BAPA</option>
+<option>MENTUA</option>
+<option>LAIN-LAIN</option>
+
+</select>
+</div>
+
+<div class="col-md-3 mb-3">
+<label>Pelajar</label>
+<select class="form-select dep-pelajar">
+<option>YA</option>
+<option>TIDAK</option>
+</select>
+</div>
+
+<div class="col-md-3 mb-3">
+<label>Pekerjaan</label>
+<select class="form-select dep-kerja">
+<option>TIDAK BEKERJA</option>
+<option>BEKERJA</option>
+<option>PESARA</option>
+</select>
+</div>
+
+<div class="col-md-3 mb-3">
+<label>Perkahwinan</label>
+<select class="form-select dep-kahwin">
+<option>BUJANG</option>
+<option>BERKAHWIN</option>
+</select>
+</div>
+
+<div class="col-md-3 mb-3">
+<label>OKU</label>
+<select class="form-select dep-oku">
+<option>TIDAK</option>
+<option>YA</option>
+</select>
+</div>
+
+<div class="col-md-12">
+<button
+type="button"
+class="btn btn-danger"
+onclick="this.closest('.spouse-card').remove()">
+
+PADAM
+
+</button>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+document
+.getElementById('dependentContainer')
+.insertAdjacentHTML('beforeend', html);
+
+}
+
+function togglePenamaan(){
+
+let jenis =
+document.getElementById('jenis_penamaan').value;
+
+if(jenis === 'PERTUBUHAN'){
+
+document
+.getElementById('penamaSection')
+.style.display='none';
+
+}else{
+
+document
+.getElementById('penamaSection')
+.style.display='block';
 
 }
 
