@@ -496,7 +496,77 @@ SETERUSNYA
 </form>
 
 </div>
+<!-- TANDATANGAN -->
 
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="section-title">
+TANDATANGAN PEMOHON
+</div>
+
+<canvas
+id="signaturePad"
+style="
+border:1px solid #ccc;
+width:100%;
+height:250px;
+background:#fff;
+"></canvas>
+
+<div class="mt-3">
+
+<button
+type="button"
+class="btn btn-secondary"
+onclick="clearSignature()">
+
+PADAM TANDATANGAN
+
+</button>
+
+</div>
+
+</div>
+</div>
+
+<!-- AKUAN -->
+
+<div class="card shadow-sm mb-4">
+<div class="card-body">
+
+<div class="form-check">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="akuan"
+required>
+
+<label class="form-check-label">
+
+SAYA MENGAKU BAHAWA SEMUA MAKLUMAT
+YANG DIBERIKAN ADALAH BENAR.
+
+</label>
+
+</div>
+
+</div>
+</div>
+
+<div class="text-center mb-5">
+
+<button
+type="submit"
+class="btn btn-success btn-lg">
+
+HANTAR PERMOHONAN
+
+</button>
+
+</div>
+    
 <script>
 
 function addSpouse(){
@@ -669,7 +739,344 @@ document
 }
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script>
 
+const SCRIPT_URL =
+'https://script.google.com/macros/s/AKfycbwLH1TFwfcSAtMUjamoEge0VSFBogAEj6bnH40_-qhF0ZgRKzRq184FT018CrESpHvBJw/exec';
+
+
+// =========================
+// SIGNATURE
+// =========================
+
+const canvas =
+document.getElementById('signaturePad');
+
+const signaturePad =
+new SignaturePad(canvas);
+
+function resizeCanvas(){
+
+const ratio =
+Math.max(window.devicePixelRatio || 1,1);
+
+canvas.width =
+canvas.offsetWidth * ratio;
+
+canvas.height =
+250 * ratio;
+
+canvas.getContext("2d")
+.scale(ratio,ratio);
+
+signaturePad.clear();
+
+}
+
+window.addEventListener(
+'resize',
+resizeCanvas
+);
+
+resizeCanvas();
+
+function clearSignature(){
+
+signaturePad.clear();
+
+}
+
+
+// =========================
+// CAPS LOCK
+// =========================
+
+document.addEventListener(
+'input',
+function(e){
+
+if(
+e.target.classList.contains('uppercase')
+){
+
+e.target.value =
+e.target.value.toUpperCase();
+
+}
+
+}
+);
+
+
+// =========================
+// FORMAT IC
+// =========================
+
+document
+.getElementById('ic')
+.addEventListener(
+'input',
+function(){
+
+let value =
+this.value.replace(/\D/g,'');
+
+if(value.length > 12){
+
+value =
+value.substring(0,12);
+
+}
+
+if(value.length >= 7){
+
+value =
+value.replace(
+/(\d{6})(\d+)/,
+'$1-$2'
+);
+
+}
+
+if(value.length >= 10){
+
+value =
+value.replace(
+/(\d{6})-(\d{2})(\d+)/,
+'$1-$2-$3'
+);
+
+}
+
+this.value = value;
+
+extractDOB(value);
+
+}
+);
+
+
+// =========================
+// DOB FROM IC
+// =========================
+
+function extractDOB(ic){
+
+let raw =
+ic.replace(/\D/g,'');
+
+if(raw.length !== 12)
+return;
+
+let yy =
+parseInt(raw.substring(0,2));
+
+let mm =
+raw.substring(2,4);
+
+let dd =
+raw.substring(4,6);
+
+let year =
+yy > 30
+? 1900 + yy
+: 2000 + yy;
+
+let dob =
+`${year}-${mm}-${dd}`;
+
+document
+.getElementById('tarikh_lahir')
+.value = dob;
+
+let age =
+new Date().getFullYear()
+- year;
+
+document
+.getElementById('umur')
+.value = age;
+
+}
+
+
+// =========================
+// TELEFON
+// =========================
+
+function normalizePhone(phone){
+
+phone =
+phone.replace(/\D/g,'');
+
+if(phone.startsWith('0')){
+
+phone =
+'60' + phone.substring(1);
+
+}
+
+return '+' + phone;
+
+}
+
+
+// =========================
+// SUBMIT
+// =========================
+
+document
+.getElementById('membershipForm')
+.addEventListener(
+'submit',
+async function(e){
+
+e.preventDefault();
+
+if(signaturePad.isEmpty()){
+
+alert(
+'SILA TANDATANGAN TERLEBIH DAHULU'
+);
+
+return;
+
+}
+
+let signature =
+signaturePad.toDataURL();
+
+let formData = {
+
+action:'submitApplication',
+
+nama:
+document.getElementById('nama').value,
+
+ic:
+document.getElementById('ic').value,
+
+tarikh_lahir:
+document.getElementById('tarikh_lahir').value,
+
+umur:
+document.getElementById('umur').value,
+
+jantina:
+document.getElementById('jantina').value,
+
+status_perkahwinan:
+document.getElementById('status_perkahwinan').value,
+
+pekerjaan:
+document.getElementById('pekerjaan').value,
+
+telefon:
+normalizePhone(
+document.getElementById('telefon').value
+),
+
+email:
+document.getElementById('email').value,
+
+alamat_lot:
+document.getElementById('alamat_lot').value,
+
+alamat_jalan:
+document.getElementById('alamat_jalan').value,
+
+alamat_kampung:
+document.getElementById('alamat_kampung').value,
+
+alamat_poskod:
+document.getElementById('alamat_poskod').value,
+
+alamat_daerah:
+document.getElementById('alamat_daerah').value,
+
+alamat_negeri:
+document.getElementById('alamat_negeri').value,
+
+waris_nama:
+document.getElementById('waris_nama').value,
+
+waris_hubungan:
+document.getElementById('waris_hubungan').value,
+
+waris_telefon:
+document.getElementById('waris_telefon').value,
+
+collector_id:
+document.getElementById('collector_id').value,
+
+jenis_penamaan:
+document.getElementById('jenis_penamaan').value,
+
+penama_nama:
+document.getElementById('penama_nama').value,
+
+penama_ic:
+document.getElementById('penama_ic').value,
+
+penama_hubungan:
+document.getElementById('penama_hubungan').value,
+
+penama_telefon:
+document.getElementById('penama_telefon').value,
+
+penama_alamat:
+document.getElementById('penama_alamat').value,
+
+signature_url:
+signature
+
+};
+
+try{
+
+const response =
+await fetch(
+SCRIPT_URL,
+{
+method:'POST',
+body:JSON.stringify(formData)
+}
+);
+
+const result =
+await response.json();
+
+if(result.success){
+
+alert(
+'PERMOHONAN BERJAYA DIHANTAR'
+);
+
+location.reload();
+
+}else{
+
+alert(
+result.message
+);
+
+}
+
+}catch(error){
+
+alert(
+'RALAT MENGHANTAR PERMOHONAN'
+);
+
+console.error(error);
+
+}
+
+}
+);
+
+</script>
 </body>
 </html>
 ```
