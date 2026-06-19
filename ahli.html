@@ -296,6 +296,25 @@ onclick="addSpouse()">
 
 <div class="text-center mb-5">
 
+<button
+type="button"
+class="btn btn-warning btn-lg me-2"
+onclick="saveDraft()">
+
+SIMPAN DRAF
+
+</button>
+
+<button
+type="submit"
+class="btn btn-success btn-lg">
+
+HANTAR PERMOHONAN
+
+</button>
+
+</div>
+
 <!-- TANGGUNGAN -->
 
 <div class="card shadow-sm mb-4">
@@ -555,6 +574,25 @@ YANG DIBERIKAN ADALAH BENAR.
 </div>
 
 <div class="text-center mb-5">
+
+<button
+type="button"
+class="btn btn-warning btn-lg me-2"
+onclick="saveDraft()">
+
+SIMPAN DRAF
+
+</button>
+
+<button
+type="submit"
+class="btn btn-success btn-lg">
+
+HANTAR PERMOHONAN
+
+</button>
+
+</div>
 
 <button
 type="submit"
@@ -946,7 +984,44 @@ return;
 
 let signature =
 signaturePad.toDataURL();
+const pasangan = [];
 
+document
+.querySelectorAll(
+'.spouse-card'
+)
+.forEach(card=>{
+
+  pasangan.push({
+
+    nama:
+      card.querySelector(
+        '.spouse-name'
+      )?.value || '',
+
+    ic:
+      card.querySelector(
+        '.spouse-ic'
+      )?.value || '',
+
+    tarikh_lahir:
+      card.querySelector(
+        '.spouse-dob'
+      )?.value || '',
+
+    umur:
+      card.querySelector(
+        '.spouse-age'
+      )?.value || '',
+
+    telefon:
+      card.querySelector(
+        '.spouse-phone'
+      )?.value || ''
+
+  });
+
+});
 let formData = {
 
 action:'submitApplication',
@@ -1031,6 +1106,9 @@ document.getElementById('penama_alamat').value,
 signature_url:
 signature
 
+pasangan: pasangan,
+
+tanggungan: tanggungan,
 };
 
 try{
@@ -1076,6 +1154,277 @@ console.error(error);
 }
 );
 
+    function saveDraft(){
+
+  const draft = {
+
+    nama:
+      document.getElementById('nama').value,
+
+    ic:
+      document.getElementById('ic').value,
+
+    telefon:
+      document.getElementById('telefon').value,
+
+    email:
+      document.getElementById('email').value
+
+  };
+
+  localStorage.setItem(
+    'khairatDraft',
+    JSON.stringify(draft)
+  );
+
+  alert(
+    'DRAF BERJAYA DISIMPAN'
+  );
+
+}
+
+    window.addEventListener(
+'load',
+function(){
+
+  const draft =
+    localStorage.getItem(
+      'khairatDraft'
+    );
+
+  if(!draft) return;
+
+  const data =
+    JSON.parse(draft);
+
+  document.getElementById('nama').value =
+    data.nama || '';
+
+  document.getElementById('ic').value =
+    data.ic || '';
+
+  document.getElementById('telefon').value =
+    data.telefon || '';
+
+  document.getElementById('email').value =
+    data.email || '';
+
+});
+    function formatIC(value){
+
+  value =
+    value.replace(/\D/g,'');
+
+  if(value.length > 12){
+
+    value =
+      value.substring(0,12);
+
+  }
+
+  if(value.length > 6){
+
+    value =
+      value.replace(
+        /^(\d{6})(\d+)/,
+        '$1-$2'
+      );
+
+  }
+
+  if(value.length > 9){
+
+    value =
+      value.replace(
+        /^(\d{6})-(\d{2})(\d+)/,
+        '$1-$2-$3'
+      );
+
+  }
+
+  return value;
+
+}
+    document.addEventListener(
+'input',
+function(e){
+
+  if(
+    e.target.classList.contains('spouse-ic')
+  ){
+
+    e.target.value =
+      formatIC(
+        e.target.value
+      );
+
+  }
+
+  if(
+    e.target.classList.contains('dep-ic')
+  ){
+
+    e.target.value =
+      formatIC(
+        e.target.value
+      );
+
+  }
+
+});
+    function getDOBFromIC(ic){
+
+  ic =
+    ic.replace(/\D/g,'');
+
+  if(ic.length !== 12)
+    return null;
+
+  let year =
+    parseInt(
+      ic.substring(0,2)
+    );
+
+  year =
+    year < 30
+    ? 2000 + year
+    : 1900 + year;
+
+  const month =
+    ic.substring(2,4);
+
+  const day =
+    ic.substring(4,6);
+
+  return `${year}-${month}-${day}`;
+
+}
+    function calculateAge(dob){
+
+  const birth =
+    new Date(dob);
+
+  const today =
+    new Date();
+
+  let age =
+    today.getFullYear() -
+    birth.getFullYear();
+
+  const m =
+    today.getMonth() -
+    birth.getMonth();
+
+  if(
+    m < 0 ||
+    (
+      m === 0 &&
+      today.getDate() <
+      birth.getDate()
+    )
+  ){
+
+    age--;
+
+  }
+
+  return age;
+
+}
+    if(
+  e.target.classList.contains('spouse-ic')
+){
+
+  const card =
+    e.target.closest(
+      '.spouse-card'
+    );
+
+  const dob =
+    getDOBFromIC(
+      e.target.value
+    );
+
+  if(dob){
+
+    card.querySelector(
+      '.spouse-dob'
+    ).value = dob;
+
+    card.querySelector(
+      '.spouse-age'
+    ).value =
+      calculateAge(dob);
+
+  }
+
+}
+    if(
+  e.target.classList.contains('dep-ic')
+){
+
+  const card =
+    e.target.closest(
+      '.dependent-card'
+    );
+
+  const dob =
+    getDOBFromIC(
+      e.target.value
+    );
+
+  if(dob){
+
+    card.querySelector(
+      '.dep-dob'
+    ).value = dob;
+
+    card.querySelector(
+      '.dep-age'
+    ).value =
+      calculateAge(dob);
+
+  }
+
+}
+    const tanggungan = [];
+
+document
+.querySelectorAll(
+'.dependent-card'
+)
+.forEach(card=>{
+
+  tanggungan.push({
+
+    nama:
+      card.querySelector(
+        '.dep-name'
+      )?.value || '',
+
+    ic:
+      card.querySelector(
+        '.dep-ic'
+      )?.value || '',
+
+    tarikh_lahir:
+      card.querySelector(
+        '.dep-dob'
+      )?.value || '',
+
+    umur:
+      card.querySelector(
+        '.dep-age'
+      )?.value || '',
+
+    hubungan:
+      card.querySelector(
+        '.dep-hubungan'
+      )?.value || ''
+
+  });
+
+});
 </script>
 </body>
 </html>
