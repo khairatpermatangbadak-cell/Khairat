@@ -395,7 +395,35 @@
     setupSignaturePad();
     loadDraft();
     togglePenamaan();
+    loadCollectors();
   });
+
+  // =========================
+  // LOAD WAKIL PENGUTIP
+  // =========================
+  async function loadCollectors() {
+    try {
+      const response = await fetch(SCRIPT_URL + '?action=collectors');
+      const result = await response.json();
+
+      const select = document.getElementById('collector_id');
+
+      if (!result.success || !Array.isArray(result.data)) {
+        console.error('Data wakil pengutip tidak sah:', result);
+        return;
+      }
+
+      result.data.forEach(function (item) {
+        const option = document.createElement('option');
+        option.value = item.collector_id;
+        option.textContent = item.nama + ' - ' + item.kawasan;
+        select.appendChild(option);
+      });
+
+    } catch (error) {
+      console.error('Gagal load wakil pengutip:', error);
+    }
+  }
 
   // =========================
   // SIGNATURE
